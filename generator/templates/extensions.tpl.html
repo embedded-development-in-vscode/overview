@@ -1,0 +1,43 @@
+<div id="extensions" class="py-5 bg-body-tertiary">
+  <div class="container">
+    <h2 class="display-6 text-center">Ultimate Embedded Development Extensions</h2>
+    <p class="lead text-center pb-3">Transform VSCode into a Powerful Embedded Development Environment</p>
+    <div class="extensions row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xxl-5 g-3">
+      % for extension in sorted(extensions, key=lambda item: item.name.lower()):
+      <div class="col">
+        <a href="{{ EXTENSION_URL_TPL.format(id=extension.id) }}" target="_blank">
+          <div class="card shadow-sm">
+            <div class="card-img-block text-center mt-4 mb-2">
+              <img src="{{ extension.icon_url }}" class="card-img-top" alt="{{ extension.name }}">
+            </div>
+            <div class="card-body">
+              <h5 class="card-title text-center text-truncate">{{ extension.name }}</h5>
+              <small class="text-body-secondary">
+                <div class="hstack gap-3 text-nowrap">
+                  <div class="text-truncate"><i class="bi bi-patch-check-fill text-primary"></i> {{ extension.publisher_title }}</div>
+                  <div class="ms-auto" title="{{ '{:,}'.format(extension.install_cnt) }} of unique installations, not including updates."><i class="bi bi-download"></i> {{ humanize_number_fn(extension.install_cnt) }}</div>
+                </div>
+              </small>
+              <p class="card-text overflow-auto lh-sm mt-2"><small>{{ extension.description }}</small></p>
+            </div>
+            <div class="card-footer">
+              <div class="hstack gap-1" title="Average rating: {{ extension.average_rating }} out of 5">
+                % for i in range(5):
+                % if extension.average_rating >= i + 0.5:
+                <div><i class="bi bi-star-fill text-danger"></i></div>
+                % elif extension.average_rating >= i and i > 0:
+                <div><i class="bi bi-star-half text-danger"></i></div>
+                % else:
+                <div><i class="bi bi-star text-danger"></i></div>
+                %end
+                % end
+                <div class="ps-2 text-body-secondary"><small>({{ "{:,}".format(extension.rating_cnt) }} reviews)</small></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      % end
+    </div>
+</div>
+</div>

@@ -1,0 +1,39 @@
+% include("header.tpl.html")
+% include("navbar.tpl.html")
+
+<main>
+  <section>
+    <div class="container col-xxl-8 px-4 py-5">
+      <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+          <img src="/media/images/vscode-ide-laptop.png"
+            class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+        </div>
+        <div class="col-lg-6">
+          <h1 class="display-5 text-body-emphasis lh-1 mb-3">Embedded Software Development in Visual Studio Code</h1>
+          <p class="lead">An efficient and versatile code editor that offers robust capabilities for embedded development with extensive language support, rich ecosystem of extensions, intuitive user interface, integrated debugging capabilities.</p>
+          <p>
+            <a href="https://code.visualstudio.com/" class="btn btn-success my-2" target="_blank">Download VSCode</a>
+            <a href="https://forms.gle/jQiKz1wvRhYSp2mE8" class="mx-2 my-2" target="_blank"><i class="bi bi-heart-fill me-1 text-danger"></i>Participate in survey</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  % include("extensions.tpl.html")
+
+  <div id="analytics" class="bg-dark text-secondary px-4 py-5 text-center">
+    <div class="py-5">
+      <h1 class="display-6 fw-bold text-white">Embedded Devs' Extension Insight</h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="fs-5 mb-4">Discover embedded development environments for Visual Studio Code loved by the experts, and supercharge your embedded projects with confidence!</p>
+      </div>
+    </div>
+  </div>
+
+  % include("analytics.tpl.html")
+
+</main>
+
+% include("footer.tpl.html")
