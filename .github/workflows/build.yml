@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           name: webpage
-          path: 'dist/'
+          path: './dist'
 
   deploy:
     needs: build
