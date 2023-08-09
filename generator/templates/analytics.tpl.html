@@ -1,23 +1,55 @@
 % import json
 
-<div class="container my-4">
+<div class="container my-4 text-center">
+  <h2 class="display-5 pt-4">Extension Adoption Momentum</h1>
+  <p class="lead">New Installs vs. Previous Period</p>
   <canvas id="analytics-chart" style="max-height: 600px;"></canvas>
   <script>
-    var extensions = {{ !json.dumps([{item.public_id: {"name": item.name} } for item in extensions]) }};
-    var data = {};
-    var config = {
-      type: 'line',
-      data: data,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-            display: true
-          }
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var extensions = {{ !json.dumps([{"pid": item.public_id, "name": item.name} for item in sorted(extensions, key=lambda item: item.name.lower())]) }};
+    fetch("https://embedded-development-in-vscode.github.io/overview/data/analytics.json").then((response) => {
+      if (!response.ok) return;
+      response.json().then((analytics) => {
+        var labels = [];
+        var datasets = extensions.map(extension => ({_pid: extension.pid, label: ' ' + extension.name, data: []}));
+        for (var i = 1; i < analytics.length; i++) {
+          labels.push(new Date(analytics[i].timestamp * 1000));
+          datasets.forEach((dataset) => {
+            var previous = analytics[i - 1].extensions.find(item => item.pid === dataset._pid);
+            var current = analytics[i].extensions.find(item => item.pid === dataset._pid);
+
+            dataset.data.push(previous && current ? current.icnt - previous.icnt : undefined);
+          });
         }
-      },
-    };
-    new Chart(document.getElementById('analytics-chart'), config);
+        var config = {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: datasets
+          },
+          options: {
+            responsive: true,
+            radius: 4,
+            scales: {
+              x: {
+                ticks: {
+                  callback: function(value) {
+                    var date = this.getLabelForValue(value);
+                    return monthNames[date.getUTCMonth()] + ' ' + date.getUTCDate();
+                  }
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                position: 'bottom',
+                display: true
+              }
+            }
+          },
+        };
+        new Chart(document.getElementById('analytics-chart'), config);
+      });
+    });
   </script>
 </div>
