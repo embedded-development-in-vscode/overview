@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   schedule:
     # Run the job on Mondays at 00:00
-    - cron: '*/5 * * * *'
+    - cron: '0 0 * * 1'
 
 # Allow this job to clone the repository and create a page deployment
 permissions:
