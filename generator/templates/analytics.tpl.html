@@ -1,7 +1,7 @@
 % import json
 
-<div class="container my-4 text-center">
-  <h2 class="display-5 pt-4">Extension Adoption Momentum</h1>
+<div class="container my-4 text-center" style="max-width: 1024px;">
+  <h2 class="display-6 pt-4">Extension Adoption Momentum</h2>
   <p class="lead">New Installs vs. Previous Period</p>
   <canvas id="analytics-chart" style="max-height: 600px;"></canvas>
   <script>
@@ -11,13 +11,17 @@
       if (!response.ok) return;
       response.json().then((analytics) => {
         var labels = [];
-        var datasets = extensions.map(extension => ({_pid: extension.pid, label: ' ' + extension.name, data: []}));
+        var datasets = extensions.map(extension => ({
+          _pid: extension.pid,
+          label: ' ' + extension.name, data: [],
+          cubicInterpolationMode: "monotone",
+          tension: 0.4
+        }));
         for (var i = 1; i < analytics.length; i++) {
           labels.push(new Date(analytics[i].timestamp * 1000));
           datasets.forEach((dataset) => {
             var previous = analytics[i - 1].extensions.find(item => item.pid === dataset._pid);
             var current = analytics[i].extensions.find(item => item.pid === dataset._pid);
-
             dataset.data.push(previous && current ? current.icnt - previous.icnt : undefined);
           });
         }
@@ -42,8 +46,14 @@
             },
             plugins: {
               legend: {
-                position: 'bottom',
-                display: true
+                position: 'right',
+                display: true,
+                labels: {
+                  padding: 25,
+                  font: {
+                    size: 16
+                  }
+                }
               }
             }
           },
