@@ -1,80 +1,23 @@
 % import json
-% top_extensions = sorted(extensions, key=lambda item: item.install_cnt, reverse=True)
 
 <div class="container my-4">
-  <div class="row">
-    <div class="col-xs-12 col-lg-6 col-xl-4 py-4">
-      <canvas id="chart-container" style="max-height: 600px;"></canvas>
-      <script>
-        var data = {
-          labels: {{ !json.dumps([item.name for item in top_extensions]) }},
-          datasets: [
-            {
-              label: ' Installations',
-              data: {{ !json.dumps([item.install_cnt for item in top_extensions]) }}
-            }
-          ]
-        };
-        var config = {
-          type: 'doughnut',
-          data: data,
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'top',
-                display: false
-              }
-            }
-          },
-        };
-        new Chart(document.getElementById('chart-container'), config);
-      </script>
-    </div>
-    <div class="col-xs-12 col-lg-6 col-xl-8">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">#</th>
-            <th scope="col">Name</th>
-            <th scope="col" class="text-nowrap" title="The number of unique installations, not including updates.">Installations <i class="bi bi-info-circle ms-1"></i></th>
-            <th scope="col">Reviews</th>
-            <th scope="col">Rating</th>
-          </tr>
-        </thead>
-        <tbody>
-          % for (index, extension) in enumerate(top_extensions):
-          <tr>
-            <th scope="row" class="text-center">
-              % if index < 3:
-              <span class="badge text-bg-secondary">{{ index + 1 }}</span>
-              % else:
-              {{ index + 1 }}
-              % end
-            </th>
-            <td><a href="{{ EXTENSION_URL_TPL.format(id=extension.id) }}" target="_blank">{{ extension.name }}</a></td>
-            <td>{{ "{:,}".format(extension.install_cnt) }}</td>
-            <td>{{ "{:,}".format(extension.rating_cnt) }}</td>
-            <td>
-              <div class="hstack gap-1" title="Average rating: {{ extension.average_rating }} out of 5">
-                % for i in range(5):
-                % if extension.average_rating >= i + 0.5:
-                <div><i class="bi bi-star-fill text-danger"></i></div>
-                % elif extension.average_rating >= i and i > 0:
-                <div><i class="bi bi-star-half text-danger"></i></div>
-                % else:
-                <div><i class="bi bi-star text-danger"></i></div>
-                %end
-                % end
-                <!-- <div class="ps-2 text-body-secondary"><small>({{ extension.average_rating }})</small></div> -->
-              </div>
-            </td>
-          </tr>
-          % end
-        </tbody>
-
-      </table>
-    </div>
-  </div>
-
+  <canvas id="analytics-chart" style="max-height: 600px;"></canvas>
+  <script>
+    var extensions = {{ !json.dumps([{item.public_id: {"name": item.name} } for item in extensions]) }};
+    var data = {};
+    var config = {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            display: true
+          }
+        }
+      },
+    };
+    new Chart(document.getElementById('analytics-chart'), config);
+  </script>
 </div>

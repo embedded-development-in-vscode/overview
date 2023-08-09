@@ -2,14 +2,19 @@ import bottle
 import bs4
 import contextlib
 import dataclasses
+import hashlib
 import httpx
 import json
 import os
 import re
 import shutil
+import time
 
 
 EXTENSION_URL_TPL = "https://marketplace.visualstudio.com/items?itemName={id}"
+ANALYTICS_DATA_URL = (
+    "https://embedded-development-in-vscode.github.io/overview/data/analytics.json"
+)
 
 
 @dataclasses.dataclass
@@ -24,6 +29,10 @@ class ExtensionData:
     rating_cnt: int
     average_rating: float = None
     icon_url: str = None
+
+    @property
+    def public_id(self):
+        return hashlib.sha1(self.id.lower().encode()).hexdigest()[0:3]
 
 
 def list_extension_ids():
@@ -118,6 +127,30 @@ def generate_website(extensions, dst_dir):
         fp.write(html)
 
 
+def generate_analytics_data(extensions, dst_dir):
+    with httpx.Client() as http:
+        try:
+            data = http.get(ANALYTICS_DATA_URL).json()
+        except ValueError:
+            data = []
+    data.append(
+        {
+            "timestamp": time.time(),
+            "extensions": [
+                {
+                    "pid": extension.public_id,
+                    "icnt": extension.install_cnt,
+                    "rcnt": extension.rating_cnt,
+                    "ar": extension.average_rating,
+                }
+                for extension in extensions
+            ],
+        }
+    )
+    with open(os.path.join(dst_dir, "data", "analytics.json"), "w+") as fp:
+        json.dump(data, fp)
+
+
 def main():
     # cleanup
     dst_dir = "dist"
@@ -128,6 +161,7 @@ def main():
     # fetch new data
     extensions = extract_extensions_data()
     generate_website(extensions, "dist")
+    generate_analytics_data(extensions, "dist")
 
 
 if __name__ == "__main__":
