@@ -1,9 +1,13 @@
 name: Build and Publish Webpage to GitHub Pages
 
 on:
+  # On each push at any branch
+  push:
+  # Allows workflow to be run manually from the Actions tab on GitHub.
+  workflow_dispatch:
   schedule:
     # Run the job on Mondays at 00:00
-    - cron: '0 0 * * 1'
+    - cron: '*/5 * * * *'
 
 # Allow this job to clone the repository and create a page deployment
 permissions:
@@ -32,6 +36,12 @@ jobs:
         run: |
           python3 generator/generate.py
 
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          name: webpage
+          path: 'dist/'
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -39,14 +49,13 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          name: webpage
-          path: 'dist'
-
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v2
         with:
           artifact_name: webpage
+
+      - name: Clean
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: webpage
