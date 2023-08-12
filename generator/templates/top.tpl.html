@@ -1,6 +1,3 @@
-% import json
-% top_extensions = sorted(extensions, key=lambda item: item.install_cnt, reverse=True)
-
 <div class="container my-4">
   <h2 class="display-6 pt-4 text-center">Embedded Developer's Choice</h2>
   <p class="lead text-center mb-4">Most Loved Extensions by Unique Installs</p>
@@ -8,12 +5,17 @@
     <div class="col-xs-12 col-lg-6 col-xl-4 py-4">
       <canvas id="top-chart" style="max-height: 600px;"></canvas>
       <script>
+        var topExtensions = extensions.slice().sort(function (a, b) {
+          if (a.install_cnt === b.install_cnt) return 0;
+          return a.install_cnt > b.install_cnt? -1 : 1;
+        });
         var data = {
-          labels: {{ !json.dumps([item.name for item in top_extensions]) }},
+          labels: topExtensions.map(item => item.name),
           datasets: [
             {
               label: ' Installations',
-              data: {{ !json.dumps([item.install_cnt for item in top_extensions]) }}
+              data: topExtensions.map(item => item.install_cnt),
+              backgroundColor: topExtensions.map(item => "rgba(" + item.color.join(",") + ", 1)")
             }
           ]
         };
@@ -45,7 +47,7 @@
           </tr>
         </thead>
         <tbody>
-          % for (index, extension) in enumerate(top_extensions):
+          % for (index, extension) in enumerate(sorted(extensions, key=lambda item: item.install_cnt, reverse=True)):
           <tr>
             <th scope="row" class="text-center">
               % if index < 3:

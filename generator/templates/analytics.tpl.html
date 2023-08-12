@@ -5,8 +5,6 @@
   <p class="lead">New Installs vs. Previous Period</p>
   <canvas id="analytics-chart" style="max-height: 600px;"></canvas>
   <script>
-    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    var extensions = {{ !json.dumps([{"pid": item.public_id, "name": item.name} for item in sorted(extensions, key=lambda item: item.name.lower())]) }};
     fetch("https://embedded-development-in-vscode.github.io/overview/data/analytics.json").then((response) => {
       if (!response.ok) return;
       response.json().then((analytics) => {
@@ -14,6 +12,8 @@
         var datasets = extensions.map(extension => ({
           _pid: extension.pid,
           label: ' ' + extension.name, data: [],
+          borderColor: "rgba(" + extension.color.join(",") + ", 1)",
+          backgroundColor: "rgba(" + extension.color.join(",") + ", 0.5)",
           cubicInterpolationMode: "monotone",
           tension: 0.4
         }));
