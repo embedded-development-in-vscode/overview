@@ -129,26 +129,24 @@ def generate_website(extensions, dst_dir):
 
 def generate_analytics_data(extensions, dst_dir):
     with httpx.Client() as http:
-        try:
-            data = http.get(ANALYTICS_DATA_URL).json()
-        except ValueError:
-            data = []
-    data.append(
-        {
-            "timestamp": time.time(),
-            "extensions": [
-                {
-                    "pid": extension.public_id,
-                    "icnt": extension.install_cnt,
-                    "rcnt": extension.rating_cnt,
-                    "ar": extension.average_rating,
-                }
-                for extension in extensions
-            ],
-        }
-    )
+        data = http.get(ANALYTICS_DATA_URL).json()
+    if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+        data.append(
+            {
+                "timestamp": time.time(),
+                "extensions": [
+                    {
+                        "pid": extension.public_id,
+                        "icnt": extension.install_cnt,
+                        "rcnt": extension.rating_cnt,
+                        "ar": extension.average_rating,
+                    }
+                    for extension in extensions
+                ],
+            }
+        )
     with open(os.path.join(dst_dir, "data", "analytics.json"), "w+") as fp:
-        json.dump(data, fp)
+        json.dump(data[2:], fp)
 
 
 def main():
