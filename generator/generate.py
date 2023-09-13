@@ -146,7 +146,7 @@ def generate_analytics_data(extensions, dst_dir):
             }
         )
     with open(os.path.join(dst_dir, "data", "analytics.json"), "w+") as fp:
-        json.dump(data[2:], fp)
+        json.dump(data, fp)
 
 
 def main():
