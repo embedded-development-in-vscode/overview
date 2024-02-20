@@ -130,7 +130,7 @@ def generate_website(extensions, dst_dir):
 def generate_analytics_data(extensions, dst_dir):
     with httpx.Client() as http:
         data = http.get(ANALYTICS_DATA_URL).json()
-    data[-2] = data[-3]
+    del data[-2]
     if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
         data.append(
             {
