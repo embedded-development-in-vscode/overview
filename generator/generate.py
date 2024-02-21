@@ -131,21 +131,6 @@ def generate_analytics_data(extensions, dst_dir):
     with httpx.Client() as http:
         data = http.get(ANALYTICS_DATA_URL).json()
 
-    import copy
-    del data[-2]
-
-    data.insert(-1, copy.deepcopy(data[-2]))
-    data.insert(-1, copy.deepcopy(data[-2]))
-
-    data[-3]["timestamp"] = 1707094956.1642510
-    data[-2]["timestamp"] = 1707699768.7622514
-
-    for i, ext in enumerate(data[-1]["extensions"]):
-        avg_icnt = round((ext["icnt"] - data[-3]["extensions"][i]["icnt"]) / 3)
-        data[-3]["extensions"][i]["icnt"] += avg_icnt
-        data[-2]["extensions"][i]["icnt"] = data[-3]["extensions"][i]["icnt"] + avg_icnt
-
-
     if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
         data.append(
             {
