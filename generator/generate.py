@@ -131,6 +131,7 @@ def generate_analytics_data(extensions, dst_dir):
     with httpx.Client() as http:
         data = http.get(ANALYTICS_DATA_URL).json()
 
+    import copy
     data.insert(-1, copy.deepcopy(data[-2]))
     data[-1]["extensions"].insert(6, {
                     "pid": "931",
