@@ -130,10 +130,19 @@ def generate_website(extensions, dst_dir):
 def generate_analytics_data(extensions, dst_dir):
     with httpx.Client() as http:
         data = http.get(ANALYTICS_DATA_URL).json()
-    data.insert(-1, data[-2])
-    data[-2]["timestamp"] = 1707699768.7622504
-    for ext, i in data[-2]["extensions"]:
-        data[-2]["extensions"][i]["icnt"] += round((data[-1]["extensions"][i]["icnt"] - data[-2]["extensions"][i]["icnt"]) / 2)
+
+    data.insert(-1, copy.deepcopy(data[-2]))
+    data[-1]["extensions"].insert(6, {
+                    "pid": "931",
+                    "icnt": 1524,
+                    "rcnt": 1,
+                    "ar": 5.0
+                })
+    data[-2]["timestamp"] = 1707699768.7622513
+    for i, ext in enumerate(data[-2]["extensions"]):
+        print(ext["pid"], ext["icnt"], (data[-1]["extensions"][i]["icnt"] - ext["icnt"]) / 2)
+        data[-2]["extensions"][i]["icnt"] += round((data[-1]["extensions"][i]["icnt"] - ext["icnt"]) / 2)
+
 
     if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
         data.append(
