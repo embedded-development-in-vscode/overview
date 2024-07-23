@@ -8,3 +8,4 @@ RenesasElectronicsCorporation.renesas-build-utilities
 SiLabs.siliconLabsSupportExtension
 sony-spresense.spresense-vscode-ide
 stmicroelectronics.stm32-vscode-extension
+Microchip.mplab-extension-pack
