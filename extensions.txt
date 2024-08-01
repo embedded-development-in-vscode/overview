@@ -1,6 +1,7 @@
 Arm.keil-studio-pack
 espressif.esp-idf-extension
 iarsystems.iar-build
+Microchip.mplab-extension-pack
 nordic-semiconductor.nrf-connect
 NXPSemiconductors.mcuxpresso
 platformio.platformio-ide
