@@ -1,6 +1,7 @@
 Arm.keil-studio-pack
 espressif.esp-idf-extension
 iarsystems.iar-build
+Microchip.mplab-extension-pack
 nordic-semiconductor.nrf-connect
 NXPSemiconductors.mcuxpresso
 platformio.platformio-ide
@@ -8,4 +9,3 @@ RenesasElectronicsCorporation.renesas-build-utilities
 SiLabs.siliconLabsSupportExtension
 sony-spresense.spresense-vscode-ide
 stmicroelectronics.stm32-vscode-extension
-Microchip.mplab-extension-pack
