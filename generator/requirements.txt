@@ -1,4 +1,4 @@
-beautifulsoup4==4.12.2
-httpx==0.24.1
+beautifulsoup4==4.12.3
+httpx==0.27.0
 bottle==0.12.25
 black
