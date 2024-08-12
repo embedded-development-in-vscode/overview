@@ -45,12 +45,12 @@ def list_extension_ids():
 
 
 def parse_number(text):
-    match = re.match("^[^\d]*([\d,]+)[^\d]*$", text)
+    match = re.match(r"^[^\d]*([\d,]+)[^\d]*$", text)
     return int(match.group(1).replace(",", "")) if match else None
 
 
 def parse_average_rating(text):
-    match = re.match("^Average rating: ([\d\.]+) out of 5$", text.strip())
+    match = re.match(r"^Average rating: ([\d\.]+) out of 5$", text.strip())
     return float(match.group(1)) if match else None
 
 
