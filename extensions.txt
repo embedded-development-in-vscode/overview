@@ -5,6 +5,7 @@ Microchip.mplab-extension-pack
 nordic-semiconductor.nrf-connect
 NXPSemiconductors.mcuxpresso
 platformio.platformio-ide
+raspberry-pi.raspberry-pi-pico
 RenesasElectronicsCorporation.renesas-build-utilities
 SiLabs.siliconLabsSupportExtension
 sony-spresense.spresense-vscode-ide
