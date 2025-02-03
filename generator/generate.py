@@ -131,7 +131,7 @@ def generate_analytics_data(extensions, dst_dir):
     with httpx.Client() as http:
         data = http.get(ANALYTICS_DATA_URL).json()
 
-    if os.environ.get("GITHUB_EVENT_NAME") == "schedule" or True:
+    if os.environ.get("GITHUB_EVENT_NAME") == "schedule":
         data.append(
             {
                 "timestamp": time.time(),
